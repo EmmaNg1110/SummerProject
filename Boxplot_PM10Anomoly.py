@@ -387,21 +387,22 @@ data_to_plot = pd.concat([to_plot2[~np.isnan(to_plot2)], to_plot4[~np.isnan(to_p
 #data_to_plot = pd.concat([to_plot2[mask], to_plot4[mask]], axis=1)
 
 # Create a figure instance
-figure = plt.figure(1, figsize=(9, 6))
+figure = plt.figure(1, figsize=(7, 5))
 
 
 # Create an axes instance
-ax = figure.add_subplot(111)
+axes = figure.add_subplot(111)
 
 mask = ~np.isnan(data_to_plot[1])
 
 
 # Create the boxplot
-bp = ax.boxplot([data_to_plot[0][~np.isnan(data_to_plot[0])], data_to_plot[1][mask], data_to_plot[2][~np.isnan(data_to_plot[2])]], patch_artist=True)
+bp = axes.boxplot([data_to_plot[0][~np.isnan(data_to_plot[0])], data_to_plot[1][mask], data_to_plot[2][~np.isnan(data_to_plot[2])]], patch_artist=True)
 
          
-ax.set_xticklabels(['Drought', 'Normal', 'Wet'])
-ax.set_title('PM10 Anomoly')
+axes.set_xticklabels(['Drought', 'Normal', 'Wet'])
+axes.set_ylabel('μg/m3')
+axes.set_title('PM10 Anomaly')
 
 for box in bp['boxes']:
     # change outline color
@@ -425,4 +426,11 @@ for median in bp['medians']:
 for flier in bp['fliers']:
     flier.set(marker='o', color='#e7298a', alpha=0.5)
 
+# fill with colors
+colors = ['darkorange', 'darkgrey', 'lightblue']
+for bplot in (bp):
+    for patch, color in zip(bp['boxes'], colors):
+        patch.set_facecolor(color)
+
+plt.axhline(y=0, linestyle=':')
 plt.show()
